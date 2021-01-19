@@ -46,6 +46,6 @@ export default abstract class EventContainer {
 
     public destroy() {
         this.fireEvent("destroy");
-        (this.eventMap as any) = undefined;
+        (this.eventMap as unknown) = undefined;
     }
 }
