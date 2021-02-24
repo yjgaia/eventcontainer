@@ -13,12 +13,6 @@ class EventContainer {
     pass(target, eventName) {
         target.on(eventName, (...params) => this.fireEvent(eventName, ...params));
     }
-    pull(array, ...removeList) {
-        const removeSet = new Set(removeList);
-        return array.filter((el) => {
-            return removeSet.has(el) !== true;
-        });
-    }
     off(eventName, eventHandler) {
         if (eventHandler === undefined) {
             delete this.eventMap[eventName];
@@ -40,8 +34,8 @@ class EventContainer {
             }
         }
     }
-    destroy() {
-        this.fireEvent("destroy");
+    delete() {
+        this.fireEvent("delete");
         this.eventMap = undefined;
     }
 }

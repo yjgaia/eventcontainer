@@ -15,13 +15,6 @@ export default abstract class EventContainer {
         target.on(eventName, (...params) => this.fireEvent(eventName, ...params));
     }
 
-    private pull(array: any[], ...removeList: any[]) {
-        const removeSet = new Set(removeList)
-        return array.filter((el) => {
-            return removeSet.has(el) !== true;
-        });
-    }
-
     public off(eventName: string, eventHandler?: EventHandler) {
         if (eventHandler === undefined) {
             delete this.eventMap[eventName];
@@ -44,8 +37,8 @@ export default abstract class EventContainer {
         }
     }
 
-    public destroy() {
-        this.fireEvent("destroy");
+    public delete() {
+        this.fireEvent("delete");
         (this.eventMap as unknown) = undefined;
     }
 }
