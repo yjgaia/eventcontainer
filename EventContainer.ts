@@ -15,10 +15,8 @@ export default abstract class EventContainer {
         target.on(eventName, (...params) => this.fireEvent(eventName, ...params));
     }
 
-    public off(eventName: string, eventHandler?: EventHandler) {
-        if (eventHandler === undefined) {
-            delete this.eventMap[eventName];
-        } else if (this.eventMap[eventName] !== undefined) {
+    public off(eventName: string, eventHandler: EventHandler) {
+        if (this.eventMap[eventName] !== undefined) {
             const index = this.eventMap[eventName].indexOf(eventHandler);
             if (index !== -1) {
                 this.eventMap[eventName].splice(index, 1);
