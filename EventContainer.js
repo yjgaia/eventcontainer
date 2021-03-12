@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class EventContainer {
     constructor() {
         this.eventMap = {};
+        this.deleted = false;
     }
     on(eventName, eventHandler) {
         if (this.eventMap[eventName] === undefined) {
@@ -14,10 +15,7 @@ class EventContainer {
         target.on(eventName, (...params) => this.fireEvent(eventName, ...params));
     }
     off(eventName, eventHandler) {
-        if (eventHandler === undefined) {
-            delete this.eventMap[eventName];
-        }
-        else if (this.eventMap[eventName] !== undefined) {
+        if (this.eventMap[eventName] !== undefined) {
             const index = this.eventMap[eventName].indexOf(eventHandler);
             if (index !== -1) {
                 this.eventMap[eventName].splice(index, 1);
@@ -37,6 +35,7 @@ class EventContainer {
     delete() {
         this.fireEvent("delete");
         this.eventMap = undefined;
+        this.deleted = true;
     }
 }
 exports.default = EventContainer;

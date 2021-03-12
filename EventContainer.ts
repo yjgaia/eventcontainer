@@ -3,6 +3,7 @@ export type EventHandler = (...params: any[]) => any;
 export default abstract class EventContainer {
 
     private eventMap: { [eventName: string]: EventHandler[] } = {};
+    public deleted = false;
 
     public on(eventName: string, eventHandler: EventHandler) {
         if (this.eventMap[eventName] === undefined) {
@@ -38,5 +39,6 @@ export default abstract class EventContainer {
     public delete() {
         this.fireEvent("delete");
         (this.eventMap as unknown) = undefined;
+        this.deleted = true;
     }
 }
