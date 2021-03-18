@@ -4,5 +4,8 @@
     "homepage": "https://github.com/Hanul/eventcontainer",
     "version": "0.0.2",
     "types": "./EventContainer.d.ts",
-    "main": "./EventContainer.js"
+    "main": "./EventContainer.js",
+    "dependencies": {
+        "skyutil": "^0.0.1"
+    }
 }

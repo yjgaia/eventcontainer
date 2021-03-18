@@ -1,3 +1,5 @@
+import SkyUtil from "skyutil";
+
 export type EventHandler = (...params: any[]) => any;
 
 export default abstract class EventContainer {
@@ -18,10 +20,7 @@ export default abstract class EventContainer {
 
     public off(eventName: string, eventHandler: EventHandler) {
         if (this.eventMap[eventName] !== undefined) {
-            const index = this.eventMap[eventName].indexOf(eventHandler);
-            if (index !== -1) {
-                this.eventMap[eventName].splice(index, 1);
-            }
+            SkyUtil.pull(this.eventMap[eventName], eventHandler);
             if (this.eventMap[eventName].length === 0) {
                 delete this.eventMap[eventName];
             }
