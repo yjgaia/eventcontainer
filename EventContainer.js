@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+const skyutil_1 = __importDefault(require("skyutil"));
 class EventContainer {
     constructor() {
         this.eventMap = {};
@@ -11,15 +15,12 @@ class EventContainer {
         }
         this.eventMap[eventName].push(eventHandler);
     }
-    pass(target, eventName) {
-        target.on(eventName, (...params) => this.fireEvent(eventName, ...params));
+    toss(eventName, to, toEventName) {
+        this.on(eventName, (...params) => to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params));
     }
     off(eventName, eventHandler) {
         if (this.eventMap[eventName] !== undefined) {
-            const index = this.eventMap[eventName].indexOf(eventHandler);
-            if (index !== -1) {
-                this.eventMap[eventName].splice(index, 1);
-            }
+            skyutil_1.default.pull(this.eventMap[eventName], eventHandler);
             if (this.eventMap[eventName].length === 0) {
                 delete this.eventMap[eventName];
             }

@@ -14,8 +14,8 @@ export default abstract class EventContainer {
         this.eventMap[eventName].push(eventHandler);
     }
 
-    public pass(target: EventContainer, eventName: string) {
-        target.on(eventName, (...params) => this.fireEvent(eventName, ...params));
+    public toss(eventName: string, to: EventContainer, toEventName?: string) {
+        this.on(eventName, (...params) => to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params));
     }
 
     public off(eventName: string, eventHandler: EventHandler) {
