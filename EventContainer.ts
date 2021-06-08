@@ -27,12 +27,14 @@ export default abstract class EventContainer {
         }
     }
 
-    public async fireEvent(eventName: string, ...params: any[]): Promise<void> {
+    public fireEvent(eventName: string, ...params: any[]): any[] {
+        const results: any[] = [];
         if (this.eventMap[eventName] !== undefined) {
             for (const eventHandler of this.eventMap[eventName]) {
-                await eventHandler(...params);
+                results.push(eventHandler(...params));
             }
         }
+        return results;
     }
 
     public delete() {

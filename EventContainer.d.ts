@@ -5,7 +5,7 @@ export default abstract class EventContainer {
     on(eventName: string, eventHandler: EventHandler): void;
     toss(eventName: string, to: EventContainer, toEventName?: string): void;
     off(eventName: string, eventHandler: EventHandler): void;
-    fireEvent(eventName: string, ...params: any[]): Promise<void>;
+    fireEvent(eventName: string, ...params: any[]): any[];
     delete(): void;
 }
 //# sourceMappingURL=EventContainer.d.ts.map

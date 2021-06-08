@@ -26,12 +26,14 @@ class EventContainer {
             }
         }
     }
-    async fireEvent(eventName, ...params) {
+    fireEvent(eventName, ...params) {
+        const results = [];
         if (this.eventMap[eventName] !== undefined) {
             for (const eventHandler of this.eventMap[eventName]) {
-                await eventHandler(...params);
+                results.push(eventHandler(...params));
             }
         }
+        return results;
     }
     delete() {
         this.fireEvent("delete");
