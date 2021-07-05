@@ -16,7 +16,18 @@ class EventContainer {
         this.eventMap[eventName].push(eventHandler);
     }
     toss(eventName, to, toEventName) {
-        this.on(eventName, (...params) => to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params));
+        this.on(eventName, (...params) => {
+            const results = to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params);
+            const promises = [];
+            for (const result of results) {
+                if (result instanceof Promise) {
+                    promises.push(result);
+                }
+            }
+            if (promises.length > 0) {
+                return Promise.all(promises);
+            }
+        });
     }
     off(eventName, eventHandler) {
         if (this.eventMap[eventName] !== undefined) {

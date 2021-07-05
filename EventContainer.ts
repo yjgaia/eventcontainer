@@ -15,7 +15,18 @@ export default abstract class EventContainer {
     }
 
     public toss(eventName: string, to: EventContainer, toEventName?: string) {
-        this.on(eventName, (...params) => to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params));
+        this.on(eventName, (...params) => {
+            const results = to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params);
+            const promises: Promise<void>[] = [];
+            for (const result of results) {
+                if (result instanceof Promise) {
+                    promises.push(result);
+                }
+            }
+            if (promises.length > 0) {
+                return Promise.all(promises);
+            }
+        });
     }
 
     public off(eventName: string, eventHandler: EventHandler) {
