@@ -1,6 +1,6 @@
 import SkyUtil from "skyutil";
 
-export type EventHandler = (...params: any[]) => any;
+export type EventHandler = (...params: any[]) => Promise<any>;
 
 export default abstract class EventContainer {
 
@@ -15,17 +15,8 @@ export default abstract class EventContainer {
     }
 
     public toss(eventName: string, to: EventContainer, toEventName?: string) {
-        this.on(eventName, (...params) => {
-            const results = to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params);
-            const promises: Promise<void>[] = [];
-            for (const result of results) {
-                if (result instanceof Promise) {
-                    promises.push(result);
-                }
-            }
-            if (promises.length > 0) {
-                return Promise.all(promises);
-            }
+        this.on(eventName, async (...params) => {
+            return await to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params);
         });
     }
 
@@ -38,14 +29,14 @@ export default abstract class EventContainer {
         }
     }
 
-    public fireEvent(eventName: string, ...params: any[]): any[] {
-        const results: any[] = [];
+    public fireEvent(eventName: string, ...params: any[]): Promise<any[]> {
+        const promises: Promise<void>[] = [];
         if (this.eventMap[eventName] !== undefined) {
             for (const eventHandler of this.eventMap[eventName]) {
-                results.push(eventHandler(...params));
+                promises.push(eventHandler(...params));
             }
         }
-        return results;
+        return Promise.all(promises);
     }
 
     public delete() {

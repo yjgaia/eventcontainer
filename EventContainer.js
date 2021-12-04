@@ -16,17 +16,8 @@ class EventContainer {
         this.eventMap[eventName].push(eventHandler);
     }
     toss(eventName, to, toEventName) {
-        this.on(eventName, (...params) => {
-            const results = to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params);
-            const promises = [];
-            for (const result of results) {
-                if (result instanceof Promise) {
-                    promises.push(result);
-                }
-            }
-            if (promises.length > 0) {
-                return Promise.all(promises);
-            }
+        this.on(eventName, async (...params) => {
+            return await to.fireEvent(toEventName === undefined ? eventName : toEventName, ...params);
         });
     }
     off(eventName, eventHandler) {
@@ -38,13 +29,13 @@ class EventContainer {
         }
     }
     fireEvent(eventName, ...params) {
-        const results = [];
+        const promises = [];
         if (this.eventMap[eventName] !== undefined) {
             for (const eventHandler of this.eventMap[eventName]) {
-                results.push(eventHandler(...params));
+                promises.push(eventHandler(...params));
             }
         }
-        return results;
+        return Promise.all(promises);
     }
     delete() {
         this.fireEvent("delete");
