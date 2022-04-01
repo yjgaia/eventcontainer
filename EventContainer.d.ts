@@ -1,4 +1,4 @@
-export declare type EventHandler = (...params: any[]) => Promise<any>;
+export declare type EventHandler = (...params: any[]) => any;
 export default abstract class EventContainer {
     private eventMap;
     deleted: boolean;
